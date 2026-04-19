@@ -250,3 +250,48 @@ body.dark-mode {
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* -------------------------
+   Search Suggestions
+-------------------------- */
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-top: none;
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  display: none;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  min-width: 260px;
+}
+
+.suggestion-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+  .suggestion-item:hover,
+  .suggestion-item.active {
+    background-color: #f1f3f5;
+  }
+
+body.dark-mode .suggestions-dropdown {
+  background: #1e1e1e;
+  border-color: #444;
+}
+
+body.dark-mode .suggestion-item {
+  color: #f1f1f1;
+}
+
+  body.dark-mode .suggestion-item:hover,
+  body.dark-mode .suggestion-item.active {
+    background-color: #333;
+  }

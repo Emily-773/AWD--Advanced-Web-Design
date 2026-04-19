@@ -1,10 +1,13 @@
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
 const results = document.getElementById("results");
+const suggestions = document.getElementById("suggestions");
 
 const API_KEY = "AIzaSyAbhpNuzreYrqOsU0u4nj75_NO5WohpKNE";
 
 let currentController = null;
+let suggestionIndex = -1;
+let currentSuggestions = [];
 
 const FALLBACK_IMAGE = "https://via.placeholder.com/128x190?text=No+Cover";
 const FAVOURITES_KEY = "bookfinder_favourites";
@@ -45,6 +48,87 @@ function toggleDarkMode() {
   }
 }
 
+function debounce(fn, delay = 300) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
+}
+
+async function fetchSuggestions(query) {
+  if (!query || query.length < 2) {
+    hideSuggestions();
+    return;
+  }
+
+  try {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5&key=${API_KEY}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Suggestion error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const items = data.items || [];
+
+    const titles = [...new Set(
+      items
+        .map(item => item.volumeInfo?.title)
+        .filter(Boolean)
+    )];
+
+    currentSuggestions = titles;
+    renderSuggestions(titles);
+  } catch (error) {
+    console.error("Suggestion fetch failed:", error);
+    hideSuggestions();
+  }
+}
+
+function renderSuggestions(items) {
+  if (!suggestions) return;
+
+  suggestions.innerHTML = "";
+  suggestionIndex = -1;
+
+  if (!items.length) {
+    hideSuggestions();
+    return;
+  }
+
+  items.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "suggestion-item";
+    div.textContent = item;
+
+    div.addEventListener("click", () => {
+      searchInput.value = item;
+      hideSuggestions();
+      searchBooks();
+    });
+
+    suggestions.appendChild(div);
+  });
+
+  suggestions.style.display = "block";
+}
+
+function hideSuggestions() {
+  if (!suggestions) return;
+  suggestions.style.display = "none";
+  suggestions.innerHTML = "";
+  suggestionIndex = -1;
+  currentSuggestions = [];
+}
+
+function updateSuggestionHighlight(items) {
+  items.forEach((item, index) => {
+    item.classList.toggle("active", index === suggestionIndex);
+  });
+}
+
 
 // Initialise extras when page loads
 document.addEventListener("DOMContentLoaded", () => {
@@ -55,6 +139,43 @@ document.addEventListener("DOMContentLoaded", () => {
   if (darkModeToggle) {
     darkModeToggle.addEventListener("click", toggleDarkMode);
   }
+
+  const debouncedSuggestions = debounce((value) => {
+    fetchSuggestions(value);
+  }, 300);
+
+  searchInput.addEventListener("input", () => {
+    debouncedSuggestions(searchInput.value.trim());
+  });
+
+  searchInput.addEventListener("keydown", (e) => {
+    const items = suggestions ? suggestions.querySelectorAll(".suggestion-item") : [];
+
+    if (!items.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      suggestionIndex = (suggestionIndex + 1) % items.length;
+      updateSuggestionHighlight(items);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      suggestionIndex = (suggestionIndex - 1 + items.length) % items.length;
+      updateSuggestionHighlight(items);
+    } else if (e.key === "Enter" && suggestionIndex >= 0) {
+      e.preventDefault();
+      searchInput.value = items[suggestionIndex].textContent;
+      hideSuggestions();
+      searchBooks();
+    } else if (e.key === "Escape") {
+      hideSuggestions();
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (suggestions && !suggestions.contains(e.target) && e.target !== searchInput) {
+      hideSuggestions();
+    }
+  });
 });
 
 // -------------------------
@@ -62,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // -------------------------
 async function searchBooks() {
   const query = searchInput.value.trim();
+  hideSuggestions();
 
   if (!query) {
     showMessage("Please enter a book title.");

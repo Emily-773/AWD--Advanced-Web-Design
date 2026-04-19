@@ -19,13 +19,17 @@
     <div class="container">
       <span class="navbar-brand">📚 BookFinder</span>
 
-      <div class="d-flex">
-        <input id="searchInput"
-               class="form-control me-2"
-               type="text"
-               placeholder="Search books..."
-               aria-label="Search books"
-               autocomplete="off">
+      <div class="d-flex align-items-start">
+        <div class="position-relative me-2">
+          <input id="searchInput"
+                 class="form-control"
+                 type="text"
+                 placeholder="Search books..."
+                 aria-label="Search books"
+                 autocomplete="off">
+          <div id="suggestions" class="suggestions-dropdown"></div>
+        </div>
+
         <button id="searchBtn" class="btn btn-primary">Search</button>
         <button id="darkModeToggle" class="btn btn-outline-secondary ms-2" type="button" aria-label="Toggle dark mode">
           🌙
