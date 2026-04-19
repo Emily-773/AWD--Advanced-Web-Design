@@ -1,0 +1,20 @@
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.pnp.*
+
+# Dependencies
+node_modules/
+
+# VS / IDE
+.vs/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
