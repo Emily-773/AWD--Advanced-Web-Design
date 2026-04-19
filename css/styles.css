@@ -179,3 +179,74 @@ input:focus {
   outline: 3px solid #0d6efd;
   outline-offset: 2px;
 }
+
+/* -------------------------
+   Dark Mode
+-------------------------- */
+body.dark-mode {
+  background-color: #121212 !important;
+  color: #f1f1f1 !important;
+}
+
+  body.dark-mode .navbar {
+    background-color: #1e1e1e !important;
+  }
+
+  body.dark-mode .navbar-brand,
+  body.dark-mode h2,
+  body.dark-mode h4,
+  body.dark-mode h6,
+  body.dark-mode p,
+  body.dark-mode strong,
+  body.dark-mode span,
+  body.dark-mode section,
+  body.dark-mode main {
+    color: #f1f1f1 !important;
+  }
+
+  body.dark-mode .book-card,
+  body.dark-mode .card,
+  body.dark-mode .book-modal-content {
+    background-color: #1e1e1e !important;
+    color: #f1f1f1 !important;
+    border-color: #444 !important;
+  }
+
+    body.dark-mode .book-card p,
+    body.dark-mode #history p,
+    body.dark-mode #favourites p {
+      color: #d0d0d0 !important;
+    }
+
+  body.dark-mode input.form-control {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+    border: 1px solid #555 !important;
+  }
+
+    body.dark-mode input.form-control::placeholder {
+      color: #cccccc !important;
+    }
+
+  body.dark-mode #history button {
+    color: #f1f1f1 !important;
+    border-color: #888 !important;
+    background-color: transparent !important;
+  }
+
+    body.dark-mode #history button:hover {
+      background-color: #333 !important;
+    }
+
+  body.dark-mode .btn-outline-secondary {
+    color: #ffffff !important;
+    border-color: #888 !important;
+  }
+
+  body.dark-mode .book-modal-close {
+    color: #ffffff !important;
+  }
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

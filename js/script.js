@@ -9,6 +9,8 @@ let currentController = null;
 const FALLBACK_IMAGE = "https://via.placeholder.com/128x190?text=No+Cover";
 const FAVOURITES_KEY = "bookfinder_favourites";
 const HISTORY_KEY = "bookfinder_history";
+const darkModeToggle = document.getElementById("darkModeToggle");
+const THEME_KEY = "bookfinder_theme";
 
 // Event listeners
 searchBtn.addEventListener("click", searchBooks);
@@ -20,10 +22,39 @@ searchInput.addEventListener("keydown", (e) => {
   }
 });
 
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    if (darkModeToggle) darkModeToggle.textContent = "☀️";
+  } else {
+    document.body.classList.remove("dark-mode");
+    if (darkModeToggle) darkModeToggle.textContent = "🌙";
+  }
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+
+  const isDark = document.body.classList.contains("dark-mode");
+  localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+
+  if (darkModeToggle) {
+    darkModeToggle.textContent = isDark ? "☀️" : "🌙";
+  }
+}
+
+
 // Initialise extras when page loads
 document.addEventListener("DOMContentLoaded", () => {
   renderHistory();
   renderFavourites();
+  applySavedTheme();
+
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("click", toggleDarkMode);
+  }
 });
 
 // -------------------------

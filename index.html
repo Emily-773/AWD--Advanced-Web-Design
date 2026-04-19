@@ -7,6 +7,7 @@
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- Your CSS -->
   <link rel="stylesheet" href="./css/styles.css">
 </head>
@@ -23,8 +24,12 @@
                class="form-control me-2"
                type="text"
                placeholder="Search books..."
-               aria-label="Search books">
+               aria-label="Search books"
+               autocomplete="off">
         <button id="searchBtn" class="btn btn-primary">Search</button>
+        <button id="darkModeToggle" class="btn btn-outline-secondary ms-2" type="button" aria-label="Toggle dark mode">
+          🌙
+        </button>
       </div>
     </div>
   </nav>
@@ -34,7 +39,7 @@
 
     <h2 class="text-center mb-4">Find your next great read</h2>
 
-    <!-- 🔍 RECENT SEARCHES -->
+    <!-- RECENT SEARCHES -->
     <section class="mb-5">
       <h4>Recent Searches</h4>
       <div id="history" class="mt-2" aria-live="polite">
@@ -42,15 +47,15 @@
       </div>
     </section>
 
-    <!-- ❤️ FAVOURITES -->
+    <!-- FAVOURITES -->
     <section class="mb-5">
       <h4>Your Favourites</h4>
-      <div id="favourites" class="mt-2">
+      <div id="favourites" class="mt-2" aria-live="polite">
         <!-- JS will populate -->
       </div>
     </section>
 
-    <!-- 📚 RESULTS -->
+    <!-- RESULTS -->
     <section>
       <h4 class="mb-3">Results</h4>
 
